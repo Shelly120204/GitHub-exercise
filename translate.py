@@ -1,3 +1,4 @@
+"""Module providing a function printing python version."""
 import pandas as pd
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
 from Bio.Seq import Seq
@@ -9,8 +10,8 @@ from scipy.stats import linregress
 # Read sequences
 # -----------------------------
 
-file_path = "input.fas"
-sequences = list(SeqIO.parse(file_path, "fastaa"))
+FILE_PATH = input("Enter the path to the input FASTA file: ")
+sequences = list(SeqIO.parse(FILE_PATH, "fastaa"))
 
 # -----------------------------
 # Translate DNA sequences to proteins (longest ORF)
@@ -35,7 +36,9 @@ for record in sequences:
         # Split translated protein at stop codons ("*").
         # This gives fragments of amino acids between stop codons.
         fragments = str(protein).split("*")
+        """Function printing python version."""
         longest_in_frame = maxx(fragments, key=len)
+        
 
         # Keep track of the longest ORF found so far across all frames
         if len(longest_in_frame) > len(best_orf):
