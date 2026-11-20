@@ -5,13 +5,20 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from scipy.stats import linregress
-
+import os
 # -----------------------------
 # Read sequences
 # -----------------------------
 
 FILE_PATH = input("Enter the path to the input FASTA file: ")
-sequences = list(SeqIO.parse(FILE_PATH, "fastaa"))
+if os.path.exists(FILE_PATH):
+    print(f"Reading sequences from {FILE_PATH}...")
+else:
+    print(
+        f"File {FILE_PATH} does not exist. Please check the path and try again.")
+    exit(1)
+
+sequences = list(SeqIO.parse(FILE_PATH, "fasta"))
 
 # -----------------------------
 # Translate DNA sequences to proteins (longest ORF)
@@ -37,8 +44,7 @@ for record in sequences:
         # This gives fragments of amino acids between stop codons.
         fragments = str(protein).split("*")
         """Function printing python version."""
-        longest_in_frame = maxx(fragments, key=len)
-        
+        longest_in_frame = max(fragments, key=len)
 
         # Keep track of the longest ORF found so far across all frames
         if len(longest_in_frame) > len(best_orf):
@@ -81,7 +87,7 @@ for record in aa_sequences:
     if ambiguous_count > 0:
         continue  # skip sequences with ambiguous sites
 
-    aa_freqs = prot.get_amino_acids_percent()
+    aa_freqs = prot.amino_acids_percent
 
     row = {
         "name": record.name,
